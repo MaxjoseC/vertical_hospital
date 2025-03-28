@@ -7,7 +7,7 @@ class PacienteController(http.Controller):
 
     @http.route('/pacientes/consulta/<string:secuencia>', 
                 type='http', 
-                auth='none',  # Sin autenticación
+                auth='none',  
                 methods=['GET'], 
                 cors='*')
     def consultar_paciente(self, secuencia, **kwargs):
@@ -15,7 +15,7 @@ class PacienteController(http.Controller):
             # Buscar paciente con filtro seguro
             paciente = request.env['hospital.paciente'].sudo().search([
                 ('secuencia', '=', secuencia),
-                ('estado', '!=', 'borrador')  # Solo pacientes activos
+                ('estado', '!=', 'borrador') 
             ], limit=1)
 
             if not paciente:

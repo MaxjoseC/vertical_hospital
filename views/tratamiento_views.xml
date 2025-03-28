@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<!-- Vista Tree para Tratamiento -->
     <record id="view_tratamiento_tree" model="ir.ui.view">
         <field name="name">hospital.tratamiento.tree</field>
         <field name="model">hospital.tratamiento</field>
@@ -11,7 +12,7 @@
             </tree>
         </field>
     </record>
-
+    <!-- Vista Form para Tratamiento -->
     <record id="view_tratamiento_form" model="ir.ui.view">
         <field name="name">hospital.tratamiento.form</field>
         <field name="model">hospital.tratamiento</field>
@@ -27,7 +28,7 @@
             </form>
         </field>
     </record>
-
+    <!-- Menús y Acciones -->
     <menuitem id="menu_hospital_tratamientos" name="Tratamientos" parent="menu_hospital_root"/>
     
     <record id="action_tratamiento" model="ir.actions.act_window">

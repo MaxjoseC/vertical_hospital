@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
+#clase de paciente
+#hereda de la clase models.Model
 class Paciente(models.Model):
     _name = 'hospital.paciente'
     _description = 'Paciente'
@@ -29,13 +30,13 @@ class Paciente(models.Model):
     def _compute_actualizacion(self):
         for record in self:
             record.fecha_actualizacion = fields.Datetime.now()
-
+    #limitar rnc para que no tome otros caracteres que no sean numeros
     @api.constrains('rnc')
     def _check_rnc(self):
         for record in self:
             if record.rnc and not record.rnc.isdigit():
                 raise ValidationError("El RNC solo debe contener números")
-
+    #generar secuencia automaticamente
     @api.model
     def create(self, vals):
         if vals.get('secuencia', 'New') == 'New':
@@ -50,7 +51,7 @@ class Paciente(models.Model):
 
     def action_dar_baja(self):
         for record in self:
-            if record.estado == 'alta':
+            if record.estado == 'alta':         #botones para cambiar el estado del paciente
                 record.estado = 'baja'
         return True
 
@@ -59,5 +60,6 @@ class Paciente(models.Model):
             if record.estado == 'baja':
                 record.estado = 'alta'
         return True
+    
     def action_print_report(self):
         return self.env.ref('vertical_hospital.action_report_paciente').report_action(self.id)

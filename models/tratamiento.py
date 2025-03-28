@@ -15,7 +15,7 @@ class Tratamiento(models.Model):
         column1='tratamiento_id',
         column2='paciente_id'
     )
-
+    #limitar codigo para que no pueda contener la secuencia 026
     @api.constrains('codigo')
     def _check_codigo(self):
         for record in self:
