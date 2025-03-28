@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista Tree para Pacientes -->
+    <record id="view_paciente_tree" model="ir.ui.view">
+        <field name="name">hospital.paciente.tree</field>
+        <field name="model">hospital.paciente</field>
+        <field name="arch" type="xml">
+            <tree string="Pacientes">
+                <field name="secuencia" string="N° Expediente"/>
+                <field name="name" string="Nombre"/>
+                <field name="apellido" string="Apellido"/>
+                <field name="rnc" string="RNC"/>
+                <field name="estado" widget="statusbar" statusbar_visible="borrador,alta,baja"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form para Pacientes -->
+    <record id="view_paciente_form" model="ir.ui.view">
+        <field name="name">hospital.paciente.form</field>
+        <field name="model">hospital.paciente</field>
+        <field name="arch" type="xml">
+            <form string="Paciente">
+                <header>
+                    <field name="estado" widget="statusbar" statusbar_visible="borrador,alta,baja" clickable="1"/>
+                    
+                    <button name="action_confirmar_alta" 
+                            string="Confirmar Alta" 
+                            type="object" 
+                            class="oe_highlight"
+                            attrs="{'invisible': [('estado','!=','borrador')]}"/>
+                            
+                    <button name="action_dar_baja" 
+                            string="Dar de Baja" 
+                            type="object" 
+                            class="oe_danger"
+                            attrs="{'invisible': [('estado','!=','alta')]}"/>
+                            
+                    <button name="action_reabrir" 
+                            string="Reabrir Paciente" 
+                            type="object"
+                            attrs="{'invisible': [('estado','!=','baja')]}"/>
+                </header>
+                
+                <sheet>
+                    <group>
+                        <field name="secuencia" readonly="1"/>
+                        <field name="name" string="Nombre"/>
+                        <field name="apellido" string="Apellido"/>
+                        <field name="rnc" string="RNC"/>
+                        <field name="fecha_alta" readonly="1"/>
+                        <field name="fecha_actualizacion" readonly="1"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Tratamientos">
+                            <field name="tratamientos_ids" 
+                                   context="{'form_view_ref': 'vertical_hospital.view_tratamiento_form'}"
+                                   options="{'no_create': True}">
+                                <tree editable="bottom">
+                                    <field name="codigo" string="Código"/>
+                                    <field name="nombre" string="Nombre"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menús y Acciones -->
+    <menuitem id="menu_hospital_root" name="Hospital"/>
+    <menuitem id="menu_hospital_pacientes" name="Pacientes" parent="menu_hospital_root"/>
+    
+    <record id="action_paciente" model="ir.actions.act_window">
+        <field name="name">Pacientes</field>
+        <field name="res_model">hospital.paciente</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Crea tu primer paciente
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_paciente_action" name="Pacientes" parent="menu_hospital_pacientes" action="action_paciente"/>
+</odoo>

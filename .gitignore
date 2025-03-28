@@ -1,0 +1,11 @@
+echo "__pycache__/
+*.py[cod]
+*.log
+*.pot
+*.csv
+*.swp
+.DS_Store
+.idea/
+*.bak
+*.tmp
+" > .gitignore

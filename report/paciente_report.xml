@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_paciente">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Informe del Paciente</h2>
+                    <p>Secuencia: <span t-field="object.secuencia"/></p>
+                    <p>Nombre: <span t-field="object.name"/> <span t-field="object.apellido"/></p>
+                    <p>RNC: <span t-field="object.rnc"/></p>
+                    <p>Estado: <span t-field="object.estado"/></p>
+                    <p>Fecha de Alta: <span t-field="object.fecha_alta"/></p>
+                    <h3>Tratamientos</h3>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <report 
+        id="action_report_paciente" 
+        model="hospital.paciente" 
+        string="Reporte de Paciente" 
+        report_type="qweb-pdf" 
+        name="vertical_hospital.report_paciente" 
+        file="vertical_hospital.report_paciente" 
+        attachment_use="False"
+    />
+</odoo>
