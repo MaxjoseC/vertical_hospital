@@ -59,3 +59,5 @@ class Paciente(models.Model):
             if record.estado == 'baja':
                 record.estado = 'alta'
         return True
+    def action_print_report(self):
+        return self.env.ref('vertical_hospital.action_report_paciente').report_action(self.id)

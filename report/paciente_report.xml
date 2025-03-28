@@ -1,28 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_paciente">
-        <t t-call="web.html_container">
-            <t t-call="web.external_layout">
-                <div class="page">
-                    <h2>Informe del Paciente</h2>
-                    <p>Secuencia: <span t-field="object.secuencia"/></p>
-                    <p>Nombre: <span t-field="object.name"/> <span t-field="object.apellido"/></p>
-                    <p>RNC: <span t-field="object.rnc"/></p>
-                    <p>Estado: <span t-field="object.estado"/></p>
-                    <p>Fecha de Alta: <span t-field="object.fecha_alta"/></p>
-                    <h3>Tratamientos</h3>
-                </div>
+    <data>
+        <template id="report_paciente">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-set="o" t-value="docs[0]"/>
+                        
+                        <!-- Encabezado -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h2>Informe Médico Completo</h2>
+                            <h3>Datos del Paciente</h3>
+                        </div>
+                        
+                        <!-- Sección de información del paciente -->
+                        <div style="margin-bottom: 30px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="width: 30%;"><strong>N° Expediente:</strong></td>
+                                    <td><span t-field="o.secuencia"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nombre completo:</strong></td>
+                                    <td><span t-field="o.name"/> <span t-field="o.apellido"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RNC:</strong></td>
+                                    <td><span t-field="o.rnc"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Estado:</strong></td>
+                                    <td>
+                                        <span t-field="o.estado"/>
+                                        <t t-if="o.estado == 'alta'"> (Activo)</t>
+                                        <t t-elif="o.estado == 'baja'"> (Inactivo)</t>
+                                        <t t-else=""> (En proceso)</t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha de alta:</strong></td>
+                                    <td><span t-field="o.fecha_alta" t-options="{'widget': 'date'}"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <!-- Sección de tratamientos -->
+                        <div style="margin-top: 30px;">
+                            <h3>Tratamientos Asignados</h3>
+                            <t t-if="o.tratamientos_ids">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                                    <thead>
+                                        <tr style="background-color: #f2f2f2;">
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Código</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Nombre</th>
+                                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Médico</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.tratamientos_ids" t-as="tratamiento">
+                                            <tr>
+                                                <td style="padding: 8px; border: 1px solid #ddd;">
+                                                    <span t-field="tratamiento.codigo"/>
+                                                </td>
+                                                <td style="padding: 8px; border: 1px solid #ddd;">
+                                                    <span t-field="tratamiento.nombre"/>
+                                                </td>
+                                                <td style="padding: 8px; border: 1px solid #ddd;">
+                                                    <span t-field="tratamiento.medico"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p style="font-style: italic; color: #666;">No hay tratamientos asignados</p>
+                            </t>
+                        </div>
+                        
+                        <!-- Pie de página -->
+                        <div style="margin-top: 40px; text-align: right; font-size: 0.8em; color: #666;">
+                            <p>Generado el: <span t-field="o.fecha_actualizacion" t-options="{'widget': 'date'}"/></p>
+                        </div>
+                    </div>
+                </t>
             </t>
-        </t>
-    </template>
+        </template>
 
-    <report 
-        id="action_report_paciente" 
-        model="hospital.paciente" 
-        string="Reporte de Paciente" 
-        report_type="qweb-pdf" 
-        name="vertical_hospital.report_paciente" 
-        file="vertical_hospital.report_paciente" 
-        attachment_use="False"
-    />
+        <report 
+            id="action_report_paciente" 
+            model="hospital.paciente" 
+            string="Reporte de Paciente con Tratamientos" 
+            report_type="qweb-pdf" 
+            name="vertical_hospital.report_paciente" 
+            file="vertical_hospital.report_paciente" 
+            attachment_use="False"
+        />
+    </data>
 </odoo>
